@@ -74,7 +74,7 @@
         }
     </style>
 </head>
-<body class="bg-kCream text-kCharcoal" onclick="initAudioOnInteraction()">
+<body class="bg-kCream text-kCharcoal">
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
@@ -124,18 +124,6 @@
 
             renderGuestMessages();
         });
-
-        let audioStarted = false;
-        function initAudioOnInteraction() {
-            if (!audioStarted) {
-                const audio = document.getElementById('bgAudio');
-                if (audio) {
-                    audio.play().then(() => {
-                        audioStarted = true;
-                    }).catch(e => console.log("Autoplay prevented", e));
-                }
-            }
-        }
     </script>
 
     <nav class="sticky top-0 z-40 bg-kCream/90 backdrop-blur-md border-b border-kSand/60 px-6 py-4 transition-all duration-300">
@@ -154,18 +142,12 @@
     </nav>
 
     <main class="w-full flex flex-col items-center">
-        <!-- Main Photo Banner without Border/Frame -->
         <div class="w-full max-w-3xl px-0 pt-0">
             <div class="w-full h-[65vh] md:h-[75vh] overflow-hidden relative">
-                <img src="https://i.postimg.cc/sDrvF866/IMG-8390.jpg" alt="Willy & Ayu Wedding Photo" class="w-full h-full object-cover object-center scale-105 hover:scale-100 transition duration-1000" onerror="this.src='https://placehold.co/1920x1080/fcfbfa/8c7d73?text=W+%26+Y'">
+                <img src="https://i.postimg.cc/3xh9Wh1W/IMG0.jpg" alt="Willy & Ayu Wedding Photo" class="w-full h-full object-cover object-center scale-105 hover:scale-100 transition duration-1000" onerror="this.src='https://placehold.co/1920x1080/fcfbfa/8c7d73?text=W+%26+Y'">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent"></div>
             </div>
         </div>
-
-        <audio id="bgAudio" loop preload="auto">
-            <source src="Randy Newman - You ve Got a Friend in Me (From  Toy Story )_128k.mp3" type="audio/mp3">
-            您的瀏覽器不支援音樂播放元素。
-        </audio>
 
         <div class="max-w-xl w-full mx-auto px-4 pt-10 pb-12 space-y-10">
             
@@ -527,7 +509,6 @@
                 </div>
             </div>
 
-            <!-- Guest Messages Wall at the Very Bottom -->
             <div id="messages" class="k-card p-6 md:p-8 rounded-3xl shadow-lg relative space-y-6 border border-kSand">
                 <div class="text-center">
                     <span class="inline-block px-3 py-1 bg-kSoftPink text-kTaupe rounded-full text-[11px] font-semibold tracking-[0.15em] mb-2 uppercase">
