@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W & Y Wedding Day | 韓系簡約婚禮邀請函 & 出席回覆</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kCream: '#fbf9f6',
+                        kWarmWhite: '#fffeee',
+                        kSand: '#e8e2db',
+                        kTaupe: '#9c8c7d',
+                        kCharcoal: '#38322e',
+                        kRose: '#d4b2a7',
+                        kSoftPink: '#f4ecea'
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', '"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif'],
+                        cursive: ['"Great Vibes"', '"Dancing Script"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+TC:wght@300;400;500;600&family=Noto+Serif+TC:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #fbf9f6;
+            color: #38322e;
+            font-family: 'Noto Sans TC', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: 0.02em;
+        }
+        .font-serif-tc {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .k-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 178, 167, 0.25);
+            box-shadow: 0 15px 35px rgba(56, 50, 46, 0.04);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+        }
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99;
+            animation: floatUp 4s linear forwards;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fbf9f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e8e2db;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-kCream text-kCharcoal" onclick="initAudioOnInteraction()">
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const paramMap = {
+                'entry.1886153940': 'guestName',
+                'entry.1751146827': 'mailingAddress',
+                'entry.751101396': 'partnerName',
+                'entry.1089185527': 'blessingMessage'
+            };
+
+            for (const [paramId, elementId] of Object.entries(paramMap)) {
+                if (urlParams.has(paramId)) {
+                    const val = urlParams.get(paramId);
+                    const el = document.getElementById(elementId);
+                    if (el) el.value = val;
+                }
+            }
+
+            const radioParams = [
+                'entry.2029074728', 
+                'entry.1312972387', 
+                'entry.1257366017',  
+                'entry.57882988',  
+                'entry.1552436382', 
+                'entry.618488403'   
+            ];
+
+            radioParams.forEach(paramId => {
+                if (urlParams.has(paramId)) {
+                    const val = urlParams.get(paramId);
+                    const radio = document.querySelector(`input[name="${paramId}"][value="${val}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                        if (paramId === 'entry.1312972387') {
+                            toggleAttendanceFields(val.indexOf("我會參加") !== -1);
+                        }
+                        if (paramId === 'entry.57882988') {
+                            if (val.includes("紙本喜帖") && !val.includes("面交")) toggleAddressInput('mail');
+                            else if (val.includes("面交")) toggleAddressInput('pickup');
+                            else toggleAddressInput('none');
+                        }
+                    }
+                }
+            });
+
+            renderGuestMessages();
+        });
+
+        let audioStarted = false;
+        function initAudioOnInteraction() {
+            if (!audioStarted) {
+                const audio = document.getElementById('bgAudio');
+                if (audio) {
+                    audio.play().then(() => {
+                        audioStarted = true;
+                    }).catch(e => console.log("Autoplay prevented", e));
+                }
+            }
+        }
+    </script>
+
+    <nav class="sticky top-0 z-40 bg-kCream/90 backdrop-blur-md border-b border-kSand/60 px-6 py-4 transition-all duration-300">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="#" class="font-playfair italic font-bold text-xl md:text-2xl text-kTaupe tracking-wider">W & Y ✨</a>
+            <div class="hidden md:flex space-x-8 text-xs tracking-widest uppercase font-medium text-kCharcoal/70">
+                <a href="#info" class="hover:text-kTaupe transition">WEDDING INFO</a>
+                <a href="#rsvp" class="hover:text-kTaupe transition">RSVP</a>
+                <a href="#messages" class="hover:text-kTaupe transition">BLESSINGS</a>
+            </div>
+            <a href="#rsvp" class="bg-kTaupe text-white px-5 py-2 rounded-full text-xs font-medium tracking-wider hover:bg-kCharcoal transition shadow-sm">
+                RSVP 填寫
+            </a>
+        </div>
+    </nav>
+
+    <main class="w-full flex flex-col items-center">
+        <div class="w-full max-w-4xl px-0 md:px-4 pt-4 md:pt-8">
+            <div class="w-full h-[65vh] md:h-[80vh] overflow-hidden relative shadow-lg">
+                <img src="https://i.postimg.cc/sDrvF866/IMG-8390.jpg" alt="Willy & Ayu Wedding Photo" class="w-full h-full object-cover object-center scale-105 hover:scale-100 transition duration-1000" onerror="this.src='https://placehold.co/1920x1080/fbf9f6/9c8c7d?text=W+%26+Y'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+            </div>
+        </div>
+
+        <audio id="bgAudio" loop preload="auto">
+            <source src="data:audio/mp3;base64,..." onerror="this.src='https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf7f6.mp3?filename=gentle-romantic-wedding-piano-110912.mp3'">
+            您的瀏覽器不支援音樂播放元素。
+        </audio>
+
+        <div class="max-w-2xl w-full mx-auto px-4 pt-8 pb-12 space-y-10">
+            
+            <div class="text-center space-y-6">
+                <div class="inline-block px-4 py-1.5 bg-kSoftPink/70 backdrop-blur-sm rounded-full text-[11px] text-kTaupe font-medium tracking-[0.25em] uppercase border border-kRose/30">
+                    SAVE THE DATE • 2026.11.14
+                </div>
+                
+                <h1 class="font-playfair italic text-3xl md:text-5xl text-kCharcoal tracking-wide leading-tight font-normal">
+                    " We are getting married "
+                </h1>
+                
+                <div class="font-serif-tc text-sm md:text-base text-kTaupe tracking-widest leading-relaxed">
+                    <p>誠摯邀請您與我們一同見證愛情的誓言</p>
+                    <p class="mt-1">展開人生中最溫柔的新篇章</p>
+                </div>
+
+                <div class="py-2">
+                    <div class="text-base md:text-lg font-serif-tc text-kCharcoal space-y-1">
+                        <p class="font-bold text-2xl text-kTaupe tracking-wide">2026.11.14 SAT</p>
+                        <p class="text-sm md:text-base text-kCharcoal/80 font-medium">新竹 📍 辛志平校長故居</p>
+                    </div>
+                </div>
+
+                <!-- Countdown Timer -->
+                <div class="k-card p-6 rounded-3xl max-w-md mx-auto my-4 shadow-sm border border-kSand">
+                    <p class="text-[10px] text-kTaupe mb-3 tracking-[0.2em] uppercase font-semibold">Countdown to Our Wedding</p>
+                    <div id="countdown" class="grid grid-cols-4 gap-3 text-center">
+                        <div class="p-3 bg-white/90 rounded-2xl shadow-sm border border-kSand/40">
+                            <span id="days" class="block text-xl md:text-2xl font-serif-tc font-bold text-kTaupe">00</span>
+                            <span class="text-[10px] text-kTaupe/80 tracking-wider">DAYS</span>
+                        </div>
+                        <div class="p-3 bg-white/90 rounded-2xl shadow-sm border border-kSand/40">
+                            <span id="hours" class="block text-xl md:text-2xl font-serif-tc font-bold text-kTaupe">00</span>
+                            <span class="text-[10px] text-kTaupe/80 tracking-wider">HOURS</span>
+                        </div>
+                        <div class="p-3 bg-white/90 rounded-2xl shadow-sm border border-kSand/40">
+                            <span id="minutes" class="block text-xl md:text-2xl font-serif-tc font-bold text-kTaupe">00</span>
+                            <span class="text-[10px] text-kTaupe/80 tracking-wider">MINS</span>
+                        </div>
+                        <div class="p-3 bg-white/90 rounded-2xl shadow-sm border border-kSand/40">
+                            <span id="seconds" class="block text-xl md:text-2xl font-serif-tc font-bold text-kTaupe">00</span>
+                            <span class="text-[10px] text-kTaupe/80 tracking-wider">SECS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+                    <a href="#rsvp" class="px-8 py-3.5 bg-kTaupe text-white rounded-full text-xs font-medium tracking-widest shadow-md hover:bg-kCharcoal transition">
+                        <i class="fas fa-heart mr-2 text-[10px]"></i>填寫出席回覆表單
+                    </a>
+                    <button onclick="addToCalendar()" class="px-7 py-3.5 k-card text-kCharcoal rounded-full text-xs font-medium tracking-widest hover:bg-white transition border border-kRose/30 shadow-sm">
+                        <i class="far fa-calendar-plus mr-2 text-kTaupe"></i>加入日曆提醒
+                    </button>
+                </div>
+            </div>
+
+            <div id="info" class="bg-white p-6 md:p-10 rounded-3xl space-y-6 relative overflow-hidden border border-kSand shadow-xl">
+                <div class="absolute -top-12 -left-12 w-40 h-40 bg-kSoftPink/50 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-kSand/50 rounded-full blur-3xl"></div>
+
+                <div class="text-center space-y-3 text-kCharcoal font-serif-tc text-sm md:text-base leading-relaxed font-normal">
+                    <div class="text-kTaupe text-xl mb-1"><i class="fas fa-quote-left opacity-30"></i></div>
+                    <p>在日式古蹟與綠意盎然的庭園中，我們準備了溫馨的儀式與午宴。</p>
+                    <p>期待您的蒞臨，讓這天因您的祝福而更加完整。</p>
+                </div>
+
+                <!-- Program Mini Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center pt-2">
+                    <div class="bg-kCream p-4 rounded-2xl border border-kSand/60">
+                        <div class="text-kTaupe font-bold text-[11px] uppercase tracking-wider mb-1">10:30 AM</div>
+                        <h4 class="font-serif-tc font-bold text-kCharcoal text-sm">證婚儀式</h4>
+                        <p class="text-[11px] text-kTaupe mt-1">日式庭園神聖誓言</p>
+                    </div>
+                    <div class="bg-kCream p-4 rounded-2xl border border-kSand/60">
+                        <div class="text-kTaupe font-bold text-[11px] uppercase tracking-wider mb-1">11:30 AM</div>
+                        <h4 class="font-serif-tc font-bold text-kCharcoal text-sm">迎賓入席</h4>
+                        <p class="text-[11px] text-kTaupe mt-1">交流拍照與茶點</p>
+                    </div>
+                    <div class="bg-kCream p-4 rounded-2xl border border-kSand/60">
+                        <div class="text-kTaupe font-bold text-[11px] uppercase tracking-wider mb-1">12:15 PM</div>
+                        <h4 class="font-serif-tc font-bold text-kCharcoal text-sm">午宴開席</h4>
+                        <p class="text-[11px] text-kTaupe mt-1">精緻佳餚歡聚</p>
+                    </div>
+                </div>
+
+                <!-- Venue Details -->
+                <div class="pt-4 border-t border-kSand/60 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-center sm:text-left space-y-1">
+                        <h4 class="font-serif-tc font-bold text-kCharcoal text-base">辛志平校長故居 📍</h4>
+                        <p class="text-xs text-kTaupe">新竹市東區育賢里東門街32號 (近火車站步行3-5分鐘)</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="https://maps.google.com/?cid=14425321772858395429" target="_blank" class="px-4 py-2 bg-kTaupe text-white rounded-xl text-xs font-medium tracking-wider hover:bg-kCharcoal shadow transition">
+                            <i class="fas fa-map-marked-alt mr-1"></i>導航
+                        </a>
+                        <button onclick="copyAddress()" class="px-3 py-2 bg-kCream text-kCharcoal border border-kSand rounded-xl text-xs font-medium hover:bg-white transition">
+                            <i class="far fa-copy mr-1 text-kTaupe"></i>複製
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dress Code -->
+                <div class="pt-4 border-t border-kSand/60 text-center">
+                    <p class="text-[11px] font-semibold text-kTaupe tracking-[0.2em] uppercase mb-3">
+                        <i class="fas fa-palette mr-1.5"></i>DRESS CODE • 韓系質感色系建議
+                    </p>
+                    <div class="flex items-center justify-center space-x-4 sm:space-x-6 mb-4">
+                        <div class="flex flex-col items-center group">
+                            <span class="w-8 h-8 rounded-full border-2 border-white shadow-md transform group-hover:scale-110 transition duration-200" style="background-color: #fbf9c6;"></span>
+                            <span class="text-[10px] text-kCharcoal font-medium mt-1">奶油黃</span>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <span class="w-8 h-8 rounded-full border-2 border-white shadow-md transform group-hover:scale-110 transition duration-200" style="background-color: #b0c8de;"></span>
+                            <span class="text-[10px] text-kCharcoal font-medium mt-1">寶寶藍</span>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <span class="w-8 h-8 rounded-full border-2 border-white shadow-md transform group-hover:scale-110 transition duration-200" style="background-color: #7f1c34;"></span>
+                            <span class="text-[10px] text-kCharcoal font-medium mt-1">勃艮第紅</span>
+                        </div>
+                        <div class="flex flex-col items-center group">
+                            <span class="w-8 h-8 rounded-full border-2 border-white shadow-md transform group-hover:scale-110 transition duration-200" style="background-color: #40220f;"></span>
+                            <span class="text-[10px] text-kCharcoal font-medium mt-1">深巧克力</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-kCharcoal font-serif-tc space-y-1 bg-kCream py-2.5 px-4 rounded-2xl inline-block shadow-sm border border-kSand/60">
+                        <p><i class="fas fa-user-tie text-kTaupe mr-1"></i> 建議穿著<strong>質感正裝</strong>出席</p>
+                        <p><i class="fas fa-socks text-kTaupe mr-1"></i> 戶外與日式古蹟參觀，<strong>請記得穿襪子</strong>！</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rsvp" class="k-card p-6 md:p-10 rounded-3xl shadow-xl relative border border-kSand">
+                <div class="text-center mb-8">
+                    <span class="inline-block px-3 py-1 bg-kSoftPink text-kTaupe rounded-full text-[11px] font-semibold tracking-[0.15em] mb-2 uppercase">
+                        📱 RSVP INVITATION
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-serif-tc font-bold text-kCharcoal">出席回覆表單 💌</h2>
+                    <p class="text-xs text-kTaupe mt-2">填寫送出後將同步儲存並顯示於下方親友祝福牆，期待與您相見！</p>
+                </div>
+
+                <form id="weddingRsvpForm" onsubmit="submitRsvpForm(event)" class="space-y-6">
+                    <!-- Q1 & Q2 -->
+                    <div class="bg-white/80 p-4 md:p-6 rounded-2xl border border-kSand/60 space-y-4">
+                        <div class="flex items-center space-x-2 text-kTaupe font-semibold text-xs tracking-wider uppercase border-b border-kSand/40 pb-2">
+                            <span class="w-5 h-5 rounded-full bg-kTaupe text-white flex items-center justify-center text-[10px]">1</span>
+                            <span>賓客基本資訊</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-1">
+                                Q1. 您的姓名 <span class="text-rose-400">*</span>
+                            </label>
+                            <input type="text" name="entry.1886153940" id="guestName" required placeholder="請輸入您的真實姓名" class="w-full px-4 py-3 text-sm rounded-xl border border-kSand focus:outline-none focus:ring-2 focus:ring-kTaupe bg-white">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                Q2. 您與新人的關係 <span class="text-rose-400">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="relative flex items-center justify-center p-3.5 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 has-[:checked]:text-kTaupe font-medium text-xs">
+                                    <input type="radio" name="entry.2029074728" value="宥安朋友" checked class="hidden">
+                                    <i class="fas fa-heart text-kTaupe mr-2 text-xs"></i>
+                                    <span>宥安朋友</span>
+                                </label>
+                                <label class="relative flex items-center justify-center p-3.5 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 has-[:checked]:text-kTaupe font-medium text-xs">
+                                    <input type="radio" name="entry.2029074728" value="宛渝朋友" class="hidden">
+                                    <i class="fas fa-heart text-kTaupe mr-2 text-xs"></i>
+                                    <span>宛渝朋友</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white/80 p-4 md:p-6 rounded-2xl border border-kSand/60 space-y-4">
+                        <div class="flex items-center space-x-2 text-kTaupe font-semibold text-xs tracking-wider uppercase border-b border-kSand/40 pb-2">
+                            <span class="w-5 h-5 rounded-full bg-kTaupe text-white flex items-center justify-center text-[10px]">2</span>
+                            <span>出席調查</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                Q3. 您是否出席婚禮呢？ <span class="text-rose-400">*</span>
+                            </label>
+                            <div class="grid grid-cols-1 gap-3">
+                                <label class="relative flex items-center p-4 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                    <input type="radio" name="entry.1312972387" value="我會參加！婚禮見" checked onclick="toggleAttendanceFields(true)" class="hidden">
+                                    <div class="text-xl mr-3">🎉</div>
+                                    <div>
+                                        <div class="font-bold text-xs text-kCharcoal">我會參加！婚禮見</div>
+                                        <div class="text-[10px] text-kTaupe">期待現場與您共襄盛舉</div>
+                                    </div>
+                                </label>
+
+                                <label class="relative flex items-center p-4 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                    <input type="radio" name="entry.1312972387" value="有事無法出席" onclick="toggleAttendanceFields(false)" class="hidden">
+                                    <div class="text-xl mr-3">🫶</div>
+                                    <div>
+                                        <div class="font-bold text-xs text-kCharcoal">有事無法出席！獻上滿滿祝福 🫶</div>
+                                        <div class="text-[10px] text-kTaupe">無法參加者下方細節不需填寫</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div id="attendingDetails" class="space-y-6">
+                        <div class="bg-white/80 p-4 md:p-6 rounded-2xl border border-kSand/60 space-y-5">
+                            <div class="flex items-center space-x-2 text-kTaupe font-semibold text-xs tracking-wider uppercase border-b border-kSand/40 pb-2">
+                                <span class="w-5 h-5 rounded-full bg-kTaupe text-white flex items-center justify-center text-[10px]">3</span>
+                                <span>細節調查</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                    Q4. 您是否會出席證婚儀式呢？ <span class="text-rose-400">*</span>
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                        <input type="radio" name="entry.1257366017" value="我會參加10:30證婚儀式" checked class="hidden">
+                                        <i class="fas fa-ring text-kTaupe mr-2 text-xs"></i>
+                                        <span class="font-medium text-xs">參加 10:30 證婚儀式</span>
+                                    </label>
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                        <input type="radio" name="entry.1257366017" value="午宴才會出席" class="hidden">
+                                        <i class="fas fa-utensils text-kTaupe mr-2 text-xs"></i>
+                                        <span class="font-medium text-xs">僅出席午宴</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                    Q5. 您需要哪種喜帖呢？ <span class="text-rose-400">*</span>
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                        <input type="radio" name="entry.57882988" value="紙本喜帖 ＋ ❪ 請於𝐐𝟔填寫收件地址💌 ❫" checked onclick="toggleAddressInput('mail')" class="hidden">
+                                        <div>
+                                            <div class="font-bold text-xs">紙本喜帖 💌</div>
+                                            <div class="text-[10px] text-kTaupe">郵寄 (需填地址)</div>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                        <input type="radio" name="entry.57882988" value="紙本喜帖 面交" onclick="toggleAddressInput('pickup')" class="hidden">
+                                        <div>
+                                            <div class="font-bold text-xs">紙本喜帖 面交 🤝</div>
+                                            <div class="text-[10px] text-kTaupe">親自面交</div>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40">
+                                        <input type="radio" name="entry.57882988" value="電子喜帖" onclick="toggleAddressInput('none')" class="hidden">
+                                        <div>
+                                            <div class="font-bold text-xs">電子喜帖 📱</div>
+                                            <div class="text-[10px] text-kTaupe">線上瀏覽</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="addressContainer" class="space-y-1">
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase">
+                                    Q6. 紙本喜帖寄送地址 <span class="text-[10px] text-kTaupe font-normal">❪ 請附上 3+3 郵遞區號 😊 ❫</span>
+                                </label>
+                                <input type="text" name="entry.1751146827" id="mailingAddress" placeholder="請輸入郵遞區號與詳細地址" class="w-full px-4 py-3 text-sm rounded-xl border border-kSand focus:outline-none focus:ring-2 focus:ring-kTaupe bg-white">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                    Q7. 當日出席總人數 <span class="text-[10px] text-kTaupe font-normal">❪ 包含自己及同行親友 ❫</span> <span class="text-rose-400">*</span>
+                                </label>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <label class="relative flex items-center justify-center p-3 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 font-medium text-xs">
+                                        <input type="radio" name="entry.1552436382" value="1位" checked class="hidden">
+                                        <span>1位</span>
+                                    </label>
+                                    <label class="relative flex items-center justify-center p-3 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 font-medium text-xs">
+                                        <input type="radio" name="entry.1552436382" value="2位" class="hidden">
+                                        <span>2位</span>
+                                    </label>
+                                    <label class="relative flex items-center justify-center p-3 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 font-medium text-xs">
+                                        <input type="radio" name="entry.1552436382" value="1大1小" class="hidden">
+                                        <span>1大1小</span>
+                                    </label>
+                                    <label class="relative flex items-center justify-center p-3 rounded-xl border border-kSand cursor-pointer bg-white text-center hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 font-medium text-xs">
+                                        <input type="radio" name="entry.1552436382" value="2大1小" class="hidden">
+                                        <span>2大1小</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-1">
+                                    Q8. 如有攜伴參加，請留下伴侶名字
+                                </label>
+                                <input type="text" name="entry.751101396" id="partnerName" placeholder="如無攜伴可留空" class="w-full px-4 py-3 text-sm rounded-xl border border-kSand focus:outline-none focus:ring-2 focus:ring-kTaupe bg-white">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-2">
+                                    Q9. 是否需要素食餐點？ <span class="text-rose-400">*</span>
+                                </label>
+                                <div class="space-y-2">
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 text-xs font-medium">
+                                        <input type="radio" name="entry.618488403" value="不需要，葷食即可" checked class="hidden">
+                                        <span class="mr-2">🥩</span>
+                                        <span>不需要，葷食即可</span>
+                                    </label>
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 text-xs font-medium">
+                                        <input type="radio" name="entry.618488403" value="需要1份素食餐點" class="hidden">
+                                        <span class="mr-2">🥗</span>
+                                        <span>需要 1 份素食餐點</span>
+                                    </label>
+                                    <label class="relative flex items-center p-3 rounded-xl border border-kSand cursor-pointer bg-white hover:border-kTaupe transition select-none has-[:checked]:border-kTaupe has-[:checked]:bg-kSoftPink/40 text-xs font-medium">
+                                        <input type="radio" name="entry.618488403" value="需要2份素食餐點" class="hidden">
+                                        <span class="mr-2">🥗</span>
+                                        <span>需要 2 份素食餐點</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blessing Message Field -->
+                    <div class="bg-white/80 p-4 md:p-6 rounded-2xl border border-kSand/60 space-y-3">
+                        <div class="flex items-center space-x-2 text-kTaupe font-semibold text-xs tracking-wider uppercase border-b border-kSand/40 pb-2">
+                            <span class="w-5 h-5 rounded-full bg-kTaupe text-white flex items-center justify-center text-[10px]">💓</span>
+                            <span>給新人的祝福</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-kCharcoal tracking-wider uppercase mb-1">留下您的祝福話語（送出後將即時顯示於下方親友祝福牆）✨</label>
+                            <textarea name="entry.1089185527" id="blessingMessage" rows="3" placeholder="留下溫馨的祝福..." class="w-full px-4 py-3 text-sm rounded-xl border border-kSand focus:outline-none focus:ring-2 focus:ring-kTaupe bg-white"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full py-4 bg-kTaupe text-white text-sm font-bold tracking-widest uppercase rounded-2xl shadow-lg hover:bg-kCharcoal transition transform active:scale-[0.98] flex items-center justify-center space-x-2">
+                        <i class="fas fa-heart text-xs"></i>
+                        <span id="submitBtnText">確認送出回覆</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="k-card p-6 md:p-8 rounded-3xl shadow-xl text-center space-y-4 border border-kSand">
+                <div class="inline-block p-3 bg-emerald-50 text-emerald-600 rounded-full text-xl mb-1">
+                    <i class="fab fa-line text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-serif-tc font-bold text-kCharcoal">加入婚禮專屬 LINE 群組</h3>
+                <p class="text-xs text-kTaupe leading-relaxed max-w-md mx-auto">
+                    填寫完出席表單後，歡迎掃描 QR Code 或點擊下方按鈕加入群組，隨時掌握交通指引與最新動態！💬
+                </p>
+                <div class="py-2 flex justify-center">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-kSand inline-block">
+                        <img src="https://i.postimg.cc/CKxFqw8B/IMG-0123.jpg" alt="LINE Group QR Code" class="w-40 h-40 md:w-48 md:h-48 object-contain rounded-xl" onerror="this.src='https://placehold.co/200x200/ffffff/9c8c7d?text=LINE+QR+Code'">
+                        <p class="text-[10px] text-kTaupe mt-2 font-medium">使用 LINE 掃描加入群組</p>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <a href="https://line.me/ti/g/your_line_group_invite_link" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold tracking-wider rounded-xl shadow transition transform hover:scale-[1.02]">
+                        <i class="fab fa-line mr-2 text-base"></i> 點擊直接加入 LINE 群組
+                    </a>
+                </div>
+            </div>
+
+            <div id="messages" class="k-card p-6 md:p-10 rounded-3xl shadow-xl relative space-y-6 border border-kSand">
+                <div class="text-center">
+                    <span class="inline-block px-3 py-1 bg-kSoftPink text-kTaupe rounded-full text-[11px] font-semibold tracking-[0.15em] mb-2 uppercase">
+                        💬 GUEST MESSAGES
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-serif-tc font-bold text-kCharcoal">親友祝福牆 ✨</h2>
+                    <p class="text-xs text-kTaupe mt-2">歡迎留下您的祝福，將會即時顯示在此處。</p>
+                </div>
+
+                <div id="wallMessagesContainer" class="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+                    <!-- Dynamically rendered messages without sample -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-10 text-center text-xs text-kTaupe border-t border-kSand/60 bg-white/50 space-y-2">
+        <p class="font-playfair italic text-2xl text-kTaupe">" We can't wait to see you "</p>
+        <p class="tracking-widest uppercase text-[10px]">2026.11.14 Willy & Ayu Wedding</p>
+        <p class="text-[10px] text-kTaupe/70">辛志平校長故居 (新竹市東區育賢里東門街32號)</p>
+    </footer>
+
+    <div id="successModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="k-card bg-white p-8 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl border border-kSand">
+            <div class="w-16 h-16 bg-kSoftPink text-kTaupe rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="text-xl font-serif-tc font-bold text-kCharcoal">提交成功！</h3>
+            <p id="modalMessage" class="text-xs text-kTaupe leading-relaxed">
+                感謝您的回覆，資料已順利傳送，祝福牆也已同步更新！
+            </p>
+            <button onclick="closeModal()" class="w-full py-3 bg-kTaupe text-white text-xs font-bold tracking-widest uppercase rounded-xl hover:bg-kCharcoal transition">
+                關閉視窗
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const weddingDate = new Date('2026-11-14T10:30:00').getTime();
+
+        function getStoredMessages() {
+            try {
+                const stored = localStorage.getItem('wedding_guest_messages_korean_yt_v5');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            } catch(e) { console.log(e); }
+            return [];
+        }
+
+        function saveStoredMessages(msgs) {
+            try {
+                localStorage.setItem('wedding_guest_messages_korean_yt_v5', JSON.stringify(msgs));
+            } catch(e) { console.log(e); }
+        }
+
+        function renderGuestMessages() {
+            const container = document.getElementById('wallMessagesContainer');
+            if (!container) return;
+
+            const messages = getStoredMessages();
+            if (messages.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-kTaupe text-xs bg-white/50 rounded-2xl border border-dashed border-kSand">目前尚無留言，填寫上方表單留下您的祝福吧！💌</div>';
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => `
+                <div class="bg-white/90 p-4 rounded-2xl border border-kSand shadow-sm space-y-1.5 transition hover:shadow">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-kCharcoal flex items-center">
+                            <i class="fas fa-heart text-kTaupe mr-1.5 text-[9px]"></i>${escapeHtml(msg.name)}
+                            <span class="ml-2 px-2 py-0.5 bg-kSoftPink text-kTaupe rounded-full text-[10px] font-normal">${escapeHtml(msg.relation || '親友')}</span>
+                        </span>
+                        <span class="text-[10px] text-kTaupe">${escapeHtml(msg.date)}</span>
+                    </div>
+                    <p class="text-xs text-kCharcoal/90 leading-relaxed pl-4 border-l-2 border-kTaupe/30 py-0.5">
+                        ${escapeHtml(msg.content)}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = "<div class='col-span-4 font-bold text-kTaupe text-sm py-2 tracking-widest'>WEDDING DAY IS HERE!</div>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function toggleAttendanceFields(attending) {
+            const details = document.getElementById('attendingDetails');
+            if (attending) {
+                details.classList.remove('hidden');
+            } else {
+                details.classList.add('hidden');
+            }
+        }
+
+        function toggleAddressInput(mode) {
+            const addressContainer = document.getElementById('addressContainer');
+            const mailingAddressInput = document.getElementById('mailingAddress');
+            if (mode === 'mail') {
+                addressContainer.classList.remove('hidden');
+            } else {
+                addressContainer.classList.add('hidden');
+                mailingAddressInput.value = '';
+            }
+        }
+
+        function submitRsvpForm(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            submitBtn.disabled = true;
+            submitBtnText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>傳送中...';
+
+            const form = document.getElementById('weddingRsvpForm');
+            const formData = new FormData(form);
+            const formActionUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfvzHJqb2FSkj_pm_S86dxfeFMIP8X4Ohuzslp2pRxnVrV8rw/formResponse";
+
+            const guestName = document.getElementById('guestName').value.trim() || '貴賓';
+            const relationElem = document.querySelector('input[name="entry.2029074728"]:checked');
+            const relation = relationElem ? relationElem.value : '親友';
+            const blessing = document.getElementById('blessingMessage').value.trim();
+
+            if (blessing) {
+                const nowStr = new Date().toLocaleString('zh-TW', { hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/\//g, '-');
+                const messages = getStoredMessages();
+                messages.unshift({ name: guestName, relation, content: blessing, date: nowStr });
+                saveStoredMessages(messages);
+                renderGuestMessages();
+            }
+
+            fetch(formActionUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).then(() => {
+                showSuccessModal();
+            }).catch((error) => {
+                console.error(error);
+                showSuccessModal();
+            }).finally(() => {
+                submitBtn.disabled = false;
+                submitBtnText.innerText = '確認送出回覆';
+            });
+        }
+
+        function showSuccessModal() {
+            const name = document.getElementById('guestName').value || '賓客';
+            const attendanceElem = document.querySelector('input[name="entry.1312972387"]:checked');
+            const isAttending = attendanceElem ? (attendanceElem.value.indexOf("我會參加") !== -1) : true;
+
+            createHearts();
+
+            const modalMsg = isAttending 
+                ? `太棒了，親愛的 ${name}！您的回覆已成功送出，祝福牆也已即時更新，2026.11.14 辛志平校長故居見！`
+                : `感謝 ${name} 的溫暖祝福，我們已記錄您的心意並顯示於祝福牆上！🫶`;
+
+            document.getElementById('modalMessage').innerText = modalMsg;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function copyAddress() {
+            const addressText = "新竹市東區育賢里東門街32號";
+            const tempInput = document.createElement("input");
+            tempInput.value = addressText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alertCustom("已將活動地點地址複製到剪貼簿！");
+        }
+
+        function alertCustom(text) {
+            document.getElementById('modalMessage').innerText = text;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function addToCalendar() {
+            const title = encodeURIComponent("Willy & Ayu Wedding - 辛志平校長故居");
+            const details = encodeURIComponent("期待與您見面！證婚儀式 10:30 / 迎賓 11:30 / 午宴 12:15");
+            const location = encodeURIComponent("新竹市東區育賢里東門街32號");
+            const dates = "20261114T023000Z/20261114T070000Z";
+
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+            window.open(googleCalUrl, '_blank');
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle text-kTaupe text-2xl';
+                    heart.innerHTML = '🤍';
+                    heart.style.left = Math.random() * 90 + 5 + 'vw';
+                    heart.style.bottom = '10px';
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
